@@ -1,0 +1,62 @@
+import { Header } from "./components/Header";
+import React, { useState, useEffect } from "react";
+const api_key = "852fe553d00f4a07e42cdd97a9623273";
+var city;
+var country = "US";
+var data;
+var latitude;
+var longitude;
+
+
+export const App = () => {
+  const [data, setData] = useState(null);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+  function showPosition(position) {
+    console.log(latitude);
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude; 
+    getData();
+  }
+
+  async function getCountry(lat, long) {
+    const request = await fetch("https://ipinfo.io/json?token=646df66eaa0892")
+    const jsonResponse = await request.json()
+    city = jsonResponse.city;
+    // country = jsonResponse.country;
+  }
+  
+  const getData = async () => {
+    console.log("Fetching data");
+    const api_call = await fetch(
+      `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${api_key}&units=imperial`
+    );
+    setData(await api_call.json());
+    console.log(data);
+  };
+
+  useEffect(() => {
+    getCountry();
+  }, []);
+
+  if (!data)
+    return (
+      <>
+        <p>Loading..</p>
+      </>
+    );
+
+  return (
+    <>
+      <p>Current City: {city}</p>
+      <p>Current Country: {country}</p>
+      <p>Current Temperature: {data.main.temp}</p>
+      <p>Description: {data.weather[0].description}</p>
+      <p>Latitude: {latitude}</p>
+      <p>Longitude: {longitude}</p>
+    </>
+  );
+};
