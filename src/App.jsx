@@ -1,4 +1,4 @@
-import { Header } from "./components/Header";
+import { Weather } from "./components/Weather";
 import React, { useState, useEffect } from "react";
 const api_key = "852fe553d00f4a07e42cdd97a9623273";
 var city;
@@ -19,13 +19,13 @@ export const App = () => {
     console.log(latitude);
     latitude = position.coords.latitude;
     longitude = position.coords.longitude; 
-    getData();
   }
 
   async function getCountry(lat, long) {
     const request = await fetch("https://ipinfo.io/json?token=646df66eaa0892")
     const jsonResponse = await request.json()
     city = jsonResponse.city;
+    getData();
     // country = jsonResponse.country;
   }
   
@@ -51,12 +51,13 @@ export const App = () => {
 
   return (
     <>
-      <p>Current City: {city}</p>
-      <p>Current Country: {country}</p>
-      <p>Current Temperature: {data.main.temp}</p>
-      <p>Description: {data.weather[0].description}</p>
-      <p>Latitude: {latitude}</p>
-      <p>Longitude: {longitude}</p>
+    <Weather 
+     data={data}
+     city={city}
+     country={country}
+     latitude={latitude}
+     longitude={longitude}
+    />
     </>
   );
 };
