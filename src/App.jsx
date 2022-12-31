@@ -1,6 +1,6 @@
 import { Weather } from "./components/Weather";
 import React, { useState, useEffect } from "react";
-const api_key = "852fe553d00f4a07e42cdd97a9623273";
+const api_key = "key";
 var city;
 var country = "US";
 var data;
